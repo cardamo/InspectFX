@@ -26,7 +26,9 @@ public class Inspector extends Stage {
         TabPane tabs = new TabPane();
 
         Tab propertiesTab = new Tab("Properties");
+        propertiesTab.setClosable(false);
         Tab styleTab = new Tab("Style");
+        styleTab.setClosable(false);
         tabs.getTabs().addAll(propertiesTab, styleTab);
         propertiesTab.setContent(properties);
         styleTab.setContent(style);

@@ -1,12 +1,9 @@
 package ru.baikal.dc.xpector;
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -26,18 +23,31 @@ public class TestApp extends Application {
                 "Ещё один item");
         comboBox.getSelectionModel().selectFirst();
 
-        final HBox hBox = new HBox(
+        Label two = new Label("two");
+        two.setStyle("-fx-opacity: 0.3");
+        HBox hBox = new HBox(
                 new Label("one"),
-                new Label("two"),
+                two,
                 new Label("three")
         );
         hBox.setSpacing(12);
-        final VBox vBox = new VBox(
+
+        TextField textField = new TextField();
+
+        Button button = new Button("Button");
+        VBox vBox = new VBox(
                 comboBox,
                 hBox,
-                new Button("button"),
-                new CheckBox("checkbox")
+                button,
+                new CheckBox("checkbox"),
+                textField
         );
+
+        textField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                vBox.getChildren().add(new Label(textField.getText()));
+            }
+        });
 
         vBox.setSpacing(8.0);
         vBox.setMinSize(200, 200);
@@ -48,9 +58,14 @@ public class TestApp extends Application {
         primaryStage.setTitle("JavaFX app");
         primaryStage.show();
 
-        final Inspector inspector = new Inspector(primaryStage.getScene().getRoot());
-        inspector.setWidth(1200);
-        inspector.setHeight(1000);
-        inspector.show();
+        Inspector inspector = new Inspector(primaryStage.getScene().getRoot());
+        inspector.setWidth(800);
+        inspector.setHeight(600);
+        button.setOnAction(e -> {
+            if (!inspector.isShowing())
+            {
+                inspector.show();
+            }
+        });
     }
 }

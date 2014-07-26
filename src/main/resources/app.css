@@ -1,3 +1,7 @@
+.check-box:selected {
+    -fx-background-color: green;
+}
+
 .label {
     -fx-text-fill: purple;
     -fx-font-weight: bold;
