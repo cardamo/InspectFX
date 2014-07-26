@@ -13,4 +13,9 @@ extends TreeView<Node>
         setCellFactory(param -> new NodeTreeCell());
         setRoot(new NodeTreeItem(root));
     }
+
+    @Override
+    protected void layoutChildren() {
+        super.layoutChildren();
+    }
 }

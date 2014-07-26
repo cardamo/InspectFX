@@ -43,6 +43,7 @@ public class TestApp extends Application {
         box.setSpacing(8.0);
         box.setMinSize(200, 200);
         primaryStage.setScene(new Scene(box));
+        primaryStage.getScene().getStylesheets().addAll("app.css");
         primaryStage.setX(100);
         primaryStage.setY(100);
         primaryStage.setTitle("JavaFX app");

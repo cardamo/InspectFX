@@ -4,6 +4,8 @@ import javafx.beans.Observable;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Skin;
+import javafx.scene.control.Skinnable;
 import javafx.scene.control.TreeItem;
 import org.fxmisc.easybind.EasyBind;
 
