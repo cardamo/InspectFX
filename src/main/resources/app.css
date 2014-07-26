@@ -1,0 +1,7 @@
+.label {
+    -fx-text-fill: purple;
+}
+
+.tree-view {
+    -fx-background-color: lightblue;
+}
