@@ -7,12 +7,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 
 public class TestApp extends Application {
     public static void main(String[] args) {
@@ -22,13 +17,11 @@ public class TestApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        ComboBox<Shape> comboBox = new ComboBox<Shape>();
+        ComboBox<String> comboBox = new ComboBox<>();
             comboBox.getItems().addAll(
-                new Text("Text"),
-                new Rectangle(10, 10, Color.RED),
-                new Rectangle(10, 10, Color.GREEN),
-                new Rectangle(10, 10, Color.BLUE)
-            );
+                "item 1",
+                "item 2",
+                "Ещё один item");
         comboBox.getSelectionModel().selectFirst();
 
         final VBox box = new VBox(
