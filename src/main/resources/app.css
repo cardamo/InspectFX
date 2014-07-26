@@ -1,5 +1,6 @@
 .label {
     -fx-text-fill: purple;
+    -fx-font-weight: bold;
 }
 
 .tree-view {
