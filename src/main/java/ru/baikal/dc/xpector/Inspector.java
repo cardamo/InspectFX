@@ -1,6 +1,9 @@
 package ru.baikal.dc.xpector;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,8 +13,10 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import org.fxmisc.easybind.EasyBind;
+import org.reactfx.EventStreams;
 
 public class Inspector extends Stage {
+
     public Inspector(Parent root) {
         DomTree tree = new DomTree(root);
         PropertiesTable properties = new PropertiesTable();
@@ -41,5 +46,30 @@ public class Inspector extends Stage {
         setTitle("Inspector");
         tree.getRoot().setExpanded(true);
         tree.getSelectionModel().selectFirst();
+
+        addHighlightPopup(root, selected);
+    }
+
+    private void addHighlightPopup(Parent root, ObservableValue<Node> selected) {
+        HighlightPopup pop = new HighlightPopup(selected);
+        EventStreams.changesOf(selected).subscribe(change -> {
+            Node node = change.getNewValue();
+            if (node != null) {
+                Point2D point = node.localToScreen(new Point2D(0, 0));
+                pop.show(node, point.getX(), point.getY());
+            } else {
+                pop.hide();
+            }
+        });
+
+        BooleanBinding focused = Bindings.or(focusedProperty(), root.getScene().getWindow().focusedProperty());
+
+        EventStreams.changesOf(focused).subscribe(
+                f -> {
+                    if (!f.getNewValue()) {
+                        pop.hide();
+                    }
+                }
+        );
     }
 }
