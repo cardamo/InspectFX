@@ -57,7 +57,7 @@ public class StyleTable extends TableView<CascadingStyle> {
         selectorCol.setCellValueFactory(param -> ObjectConstant.valueOf(param.getValue().getSelector().toString()));
 
         TableColumn<CascadingStyle, String> ruleCol = new TableColumn<>("Value");
-        ruleCol.setCellValueFactory(param -> ObjectConstant.valueOf(getValue(param.getValue().getRule())));
+        ruleCol.setCellValueFactory(param -> ObjectConstant.valueOf(getValue(param.getValue())));
 
         TableColumn<CascadingStyle, String> originCol = new TableColumn<>("Origin");
         originCol.setCellValueFactory(param -> ObjectConstant.valueOf(param.getValue().getOrigin().toString()));
@@ -65,8 +65,9 @@ public class StyleTable extends TableView<CascadingStyle> {
         getColumns().addAll(nameCol, selectorCol, ruleCol, originCol);
     }
 
-    private String getValue(Rule rule) {
-        return rule.getDeclarations().stream()
+    private String getValue(CascadingStyle style) {
+        return style.getRule().getDeclarations().stream()
+            .filter(d -> d.getProperty().equals(style.getProperty()))
             .map(d -> d.getParsedValue().getValue().toString())
             .collect(Collectors.joining("\n"));
     }
