@@ -82,7 +82,7 @@ public class Inspector extends Stage {
         HighlightPopup pop = new HighlightPopup(selected);
         EventStreams.changesOf(selected).subscribe(change -> {
             Node node = change.getNewValue();
-            if (node != null && node != root) {
+            if (node != null && node != root && Inspector.this.isShowing()) {
                 final Bounds bounds = node.getBoundsInParent();
                 final Point2D point = node.getParent().localToScreen(bounds.getMinX(), bounds.getMinY(), bounds.getMinZ());
                 pop.show(node, point.getX(), point.getY());
