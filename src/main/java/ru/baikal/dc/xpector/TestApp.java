@@ -1,7 +1,6 @@
 package ru.baikal.dc.xpector;
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -26,9 +25,11 @@ public class TestApp extends Application {
                 "Ещё один item");
         comboBox.getSelectionModel().selectFirst();
 
+        final Label two = new Label("two");
+        two.setStyle("-fx-opacity: 0.3");
         final HBox hBox = new HBox(
                 new Label("one"),
-                new Label("two"),
+                two,
                 new Label("three")
         );
         hBox.setSpacing(12);
