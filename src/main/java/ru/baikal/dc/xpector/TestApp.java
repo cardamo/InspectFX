@@ -2,10 +2,8 @@ package ru.baikal.dc.xpector;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -34,13 +32,22 @@ public class TestApp extends Application {
         );
         hBox.setSpacing(12);
 
+        TextField textField = new TextField();
+
         Button button = new Button("Button");
         VBox vBox = new VBox(
                 comboBox,
                 hBox,
                 button,
-                new CheckBox("checkbox")
+                new CheckBox("checkbox"),
+                textField
         );
+
+        textField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                vBox.getChildren().add(new Label(textField.getText()));
+            }
+        });
 
         vBox.setSpacing(8.0);
         vBox.setMinSize(200, 200);
