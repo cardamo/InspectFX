@@ -1,7 +1,5 @@
 package ru.baikal.dc.xpector;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -64,9 +62,7 @@ public class Inspector extends Stage {
             }
         });
 
-        BooleanBinding focused = Bindings.or(focusedProperty(), root.getScene().getWindow().focusedProperty());
-
-        EventStreams.changesOf(focused).subscribe(
+        EventStreams.changesOf(focusedProperty()).subscribe(
                 f -> {
                     if (!f.getNewValue()) {
                         pop.hide();
