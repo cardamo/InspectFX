@@ -1,5 +1,7 @@
 package ru.baikal.dc.xpector;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ObjectArrays;
 import com.sun.javafx.binding.ObjectConstant;
 import com.sun.javafx.css.CascadingStyle;
 import com.sun.javafx.css.Declaration;
@@ -18,6 +20,7 @@ import org.fxmisc.easybind.EasyBind;
 import org.fxmisc.easybind.monadic.MonadicBinding;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,8 +48,8 @@ public class StyleTable extends TableView<CascadingStyle> {
     }
 
     private Set<PseudoClass>[] getTriggerStates(Node n) {
-        return null;
-//        return new Set[]{ new HashSet<>(n.getPseudoClassStates())};
+//        return null;
+        return new Set[]{ new HashSet<>(n.getPseudoClassStates())};
     }
 
     private void initColumns() {
@@ -66,9 +69,14 @@ public class StyleTable extends TableView<CascadingStyle> {
     }
 
     private String getValue(CascadingStyle style) {
+        Joiner joiner = Joiner.on("\n");
         return style.getRule().getDeclarations().stream()
             .filter(d -> d.getProperty().equals(style.getProperty()))
-            .map(d -> d.getParsedValue().getValue().toString())
+            .map(d -> d.getParsedValue().getValue())
+            .<Object[]>map(
+                val -> val.getClass().isArray() ? (Object[]) val : new Object[]{val}
+            )
+            .map(joiner::join)
             .collect(Collectors.joining("\n"));
     }
 

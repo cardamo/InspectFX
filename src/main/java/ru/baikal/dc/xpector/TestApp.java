@@ -25,18 +25,20 @@ public class TestApp extends Application {
                 "Ещё один item");
         comboBox.getSelectionModel().selectFirst();
 
-        final Label two = new Label("two");
+        Label two = new Label("two");
         two.setStyle("-fx-opacity: 0.3");
-        final HBox hBox = new HBox(
+        HBox hBox = new HBox(
                 new Label("one"),
                 two,
                 new Label("three")
         );
         hBox.setSpacing(12);
-        final VBox vBox = new VBox(
+
+        Button button = new Button("Button");
+        VBox vBox = new VBox(
                 comboBox,
                 hBox,
-                new Button("button"),
+                button,
                 new CheckBox("checkbox")
         );
 
@@ -49,9 +51,14 @@ public class TestApp extends Application {
         primaryStage.setTitle("JavaFX app");
         primaryStage.show();
 
-        final Inspector inspector = new Inspector(primaryStage.getScene().getRoot());
-        inspector.setWidth(1200);
-        inspector.setHeight(1000);
-        inspector.show();
+        Inspector inspector = new Inspector(primaryStage.getScene().getRoot());
+        inspector.setWidth(800);
+        inspector.setHeight(600);
+        button.setOnAction(e -> {
+            if (!inspector.isShowing())
+            {
+                inspector.show();
+            }
+        });
     }
 }
