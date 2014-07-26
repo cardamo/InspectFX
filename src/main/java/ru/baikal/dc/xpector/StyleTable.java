@@ -73,11 +73,18 @@ public class StyleTable extends TableView<CascadingStyle> {
         return style.getRule().getDeclarations().stream()
             .filter(d -> d.getProperty().equals(style.getProperty()))
             .map(d -> d.getParsedValue().getValue())
-            .<Object[]>map(
-                val -> val.getClass().isArray() ? (Object[]) val : new Object[]{val}
-            )
+            .map(this::mapArray)
             .map(joiner::join)
             .collect(Collectors.joining("\n"));
+    }
+
+    private Object mapArray(Object val) {
+        Object[] result = val.getClass().isArray() ? (Object[]) val : new Object[]{val};
+        Object[] transformed = new Object[result.length];
+        for (int i = 0; i < result.length; i++) {
+            transformed[i] = result[i] instanceof ParsedValue ? ((ParsedValue) result[i]).getValue() : result[i];
+        }
+        return transformed;
     }
 
     public ObjectProperty<Node> getNode() {
