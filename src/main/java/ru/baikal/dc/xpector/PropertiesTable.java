@@ -35,13 +35,13 @@ public class PropertiesTable extends TableView<Method> {
 
     private void initColumns() {
         TableColumn<Method, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(param -> ObjectConstant.valueOf(param.getValue().getName()));
+        nameCol.setCellValueFactory(param -> ObjectConstant.valueOf(formatPropertyName(param)));
         nameCol.setSortable(true);
 
         TableColumn<Method, String> typeCol = new TableColumn<>("Type");
         typeCol.setCellValueFactory(param -> {
             String typeName = param.getValue().getGenericReturnType().getTypeName();
-            return ObjectConstant.valueOf(typeName);
+            return ObjectConstant.valueOf(formatTypeName(typeName));
         });
         typeCol.setSortable(true);
 
@@ -50,19 +50,7 @@ public class PropertiesTable extends TableView<Method> {
         valueCol.setCellFactory(param -> {
             TextFieldTableCell<Method, Object> cell = new TextFieldTableCell<>();
             cell.converterProperty().bind(new ConverterBinding(cell.itemProperty()));
-            cell.editableProperty().bind(EasyBind.monadic(cell.itemProperty()).map(val -> {
-                if (val instanceof Boolean || val instanceof Double || val instanceof Integer || val instanceof String) {
-                    return true;
-                }
-                try {
-                    final Class<?> cls = val.getClass();
-                    return cls.isEnum() || cls.getMethod("valueOf", String.class) != null;
-                } catch (NoSuchMethodException ignored) {
-                }
-
-                return false;
-            }));
-            //cell.setEditable(true);
+            cell.editableProperty().bind(EasyBind.monadic(cell.itemProperty()).map(this::isScalar));
             return cell;
         });
         valueCol.setEditable(true);
@@ -71,6 +59,21 @@ public class PropertiesTable extends TableView<Method> {
 
         NumberBinding colWidth = widthProperty().divide(3);
         getColumns().forEach(col -> col.prefWidthProperty().bind(colWidth));
+    }
+
+    private String formatTypeName(String typeName) {
+        if (typeName.startsWith("javafx.beans.property.")) {
+            typeName = typeName.substring("javafx.beans.property.".length());
+        }
+        return typeName;
+    }
+
+    private String formatPropertyName(TableColumn.CellDataFeatures<Method, String> param) {
+        String name = param.getValue().getName();
+        if (name.endsWith("Property")) {
+            name = name.substring(0, name.length() - "Property".length());
+        }
+        return name;
     }
 
     private Property<Object> invokeMethod(Method method) {
@@ -83,6 +86,18 @@ public class PropertiesTable extends TableView<Method> {
 
     private boolean isProperty(Method m) {
         return Property.class.isAssignableFrom(m.getReturnType()) && m.getParameterCount() == 0;
+    }
+
+    private boolean isScalar(Object val) {
+        if (val instanceof Boolean || val instanceof Double || val instanceof Integer || val instanceof String) {
+            return true;
+        }
+        try {
+            final Class<?> cls = val.getClass();
+            return cls.isEnum() || cls.getMethod("valueOf", String.class) != null;
+        } catch (NoSuchMethodException ignored) {
+            return false;
+        }
     }
 
     public ObjectProperty<Node> getNode() {

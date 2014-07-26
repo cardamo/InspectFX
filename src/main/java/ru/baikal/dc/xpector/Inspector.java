@@ -27,6 +27,7 @@ public class Inspector extends Stage {
         tabs.getSelectionModel().select(0);
 
         splitPane.getItems().addAll(tree, tabs);
+        splitPane.setDividerPosition(0, 0.2);
 
         ObservableValue<Node> selected = EasyBind
             .monadic(tree.getSelectionModel().selectedItemProperty())
@@ -38,5 +39,7 @@ public class Inspector extends Stage {
         setScene(new Scene(splitPane));
 
         setTitle("Inspector");
+        tree.getRoot().setExpanded(true);
+        tree.getSelectionModel().selectFirst();
     }
 }
