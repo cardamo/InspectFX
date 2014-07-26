@@ -78,7 +78,7 @@ public class StyleTable extends TableView<CascadingStyle> {
             .collect(Collectors.joining("\n"));
     }
 
-    private Object mapArray(Object val) {
+    private Object[] mapArray(Object val) {
         Object[] result = val.getClass().isArray() ? (Object[]) val : new Object[]{val};
         Object[] transformed = new Object[result.length];
         for (int i = 0; i < result.length; i++) {
