@@ -50,7 +50,19 @@ public class PropertiesTable extends TableView<Method> {
         valueCol.setCellFactory(param -> {
             TextFieldTableCell<Method, Object> cell = new TextFieldTableCell<>();
             cell.converterProperty().bind(new ConverterBinding(cell.itemProperty()));
-            cell.setEditable(true);
+            cell.editableProperty().bind(EasyBind.monadic(cell.itemProperty()).map(val -> {
+                if (val instanceof Boolean || val instanceof Double || val instanceof Integer || val instanceof String) {
+                    return true;
+                }
+                try {
+                    final Class<?> cls = val.getClass();
+                    return cls.isEnum() || cls.getMethod("valueOf", String.class) != null;
+                } catch (NoSuchMethodException ignored) {
+                }
+
+                return false;
+            }));
+            //cell.setEditable(true);
             return cell;
         });
         valueCol.setEditable(true);
