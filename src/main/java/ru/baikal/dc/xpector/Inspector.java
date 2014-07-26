@@ -3,6 +3,7 @@ package ru.baikal.dc.xpector;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -55,7 +56,8 @@ public class Inspector extends Stage {
         EventStreams.changesOf(selected).subscribe(change -> {
             Node node = change.getNewValue();
             if (node != null) {
-                Point2D point = node.localToScreen(new Point2D(0, 0));
+                final Bounds bounds = node.getBoundsInParent();
+                final Point2D point = node.getParent().localToScreen(bounds.getMinX(), bounds.getMinY(), bounds.getMinZ());
                 pop.show(node, point.getX(), point.getY());
             } else {
                 pop.hide();
