@@ -3,6 +3,7 @@ package ru.baikal.dc.xpector;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.fxmisc.easybind.EasyBind;
 import org.reactfx.EventStreams;
@@ -47,6 +49,31 @@ public class Inspector extends Stage {
         tree.getSelectionModel().selectFirst();
 
         addHighlightPopup(root, selected);
+
+        root.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (event.getTarget() instanceof Node) {
+                Node node = (Node) event.getTarget();
+                TreeItem<Node> foundTreeItem = findTreeItemNode(tree.getRoot(), node);
+                if (foundTreeItem != null) {
+                    tree.getSelectionModel().select(foundTreeItem);
+                }
+            }
+        });
+    }
+
+    private TreeItem<Node> findTreeItemNode(TreeItem<Node> treeItem, Node node) {
+        Node value = treeItem.getValue();
+
+        if (value == node) {
+            return treeItem;
+        }
+        for( TreeItem<Node> child : treeItem.getChildren()){
+            TreeItem<Node> found = findTreeItemNode(child, node);
+            if(found != null)
+                return found;
+        }
+
+        return null;
     }
 
     private void addHighlightPopup(Parent root, ObservableValue<Node> selected) {
