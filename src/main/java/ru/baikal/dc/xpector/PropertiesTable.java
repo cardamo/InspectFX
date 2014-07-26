@@ -26,6 +26,7 @@ public class PropertiesTable extends TableView<Method> {
             .map(Class::getMethods)
             .map(FXCollections::observableArrayList)
             .map(list -> list.filtered(this::isProperty))
+            .map(FXCollections::observableArrayList)// to be sortable
         );
 
         initColumns();

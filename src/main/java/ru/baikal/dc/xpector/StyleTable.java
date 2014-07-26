@@ -23,7 +23,7 @@ public class StyleTable extends TableView<CssMetaData<?, ?>> {
 
         itemsProperty().bind(EasyBind.monadic(node)
             .map(Styleable::getCssMetaData)
-            .map(FXCollections::observableList)
+            .map(FXCollections::observableArrayList)
         );
 
         initColumns();
